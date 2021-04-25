@@ -37,4 +37,7 @@
     <string name="apply">Apply</string>
     <string name="floating_action_button_for_filtering">floating action button for filtering</string>
     <string name="search">Search</string>
+    <string name="cheap">Cheap</string>
+    <string name="healthy">Healthy</string>
+    <string name="diary_free">Diary Free</string>
 </resources>
