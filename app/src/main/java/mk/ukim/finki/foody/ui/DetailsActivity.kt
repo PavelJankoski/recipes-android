@@ -13,6 +13,7 @@ import mk.ukim.finki.foody.databinding.ActivityDetailsBinding
 import mk.ukim.finki.foody.ui.fragments.ingredients.IngredientsFragment
 import mk.ukim.finki.foody.ui.fragments.instructions.InstructionsFragment
 import mk.ukim.finki.foody.ui.fragments.overview.OverviewFragment
+import mk.ukim.finki.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 
 class DetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailsBinding
@@ -25,7 +26,7 @@ class DetailsActivity : AppCompatActivity() {
         binding.toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val resultBundle = Bundle()
-        resultBundle.putParcelable("recipeBundle", args.result)
+        resultBundle.putParcelable(RECIPE_RESULT_KEY, args.result)
         val fragments = arrayListOf<Fragment>(OverviewFragment(), IngredientsFragment(), InstructionsFragment())
         fragments.forEach { f ->
             f.arguments = resultBundle

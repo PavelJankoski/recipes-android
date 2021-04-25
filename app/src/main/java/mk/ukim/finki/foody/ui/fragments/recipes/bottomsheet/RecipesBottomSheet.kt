@@ -62,8 +62,14 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding.applyBtn.setOnClickListener {
-            recipesViewModel.saveMealAndDietType(mealTypeChip, mealTypeChipId, dietTypeChip, dietTypeChipId)
-            val action = RecipesBottomSheetDirections.actionRecipesBottomSheetToRecipesFragment(false)
+            recipesViewModel.saveMealAndDietType(
+                mealTypeChip,
+                mealTypeChipId,
+                dietTypeChip,
+                dietTypeChipId
+            )
+            val action =
+                RecipesBottomSheetDirections.actionRecipesBottomSheetToRecipesFragment(true)
             findNavController().navigate(action)
         }
 

@@ -5,16 +5,38 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import mk.ukim.finki.foody.R
+import mk.ukim.finki.foody.adapters.IngredientsAdapter
+import mk.ukim.finki.foody.databinding.FragmentIngredientsBinding
+import mk.ukim.finki.foody.databinding.FragmentOverviewBinding
+import mk.ukim.finki.foody.models.Result
+import mk.ukim.finki.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 
 class IngredientsFragment : Fragment() {
-
+    private var _binding: FragmentIngredientsBinding? = null
+    private val binding get() = _binding!!
+    private val mAdapter: IngredientsAdapter by lazy { IngredientsAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ingredients, container, false)
+        _binding = FragmentIngredientsBinding.inflate(inflater, container, false)
+        val args = arguments
+        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
+        setupRecyclerView()
+        myBundle?.extendedIngredients?.let { mAdapter.setData(it) }
+        return binding.root
     }
 
+    private fun setupRecyclerView() {
+        binding.ingredientsRecyclerView.adapter = mAdapter
+        binding.ingredientsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

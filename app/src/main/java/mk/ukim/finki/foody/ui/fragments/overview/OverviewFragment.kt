@@ -11,6 +11,7 @@ import mk.ukim.finki.foody.R
 import mk.ukim.finki.foody.databinding.FragmentOverviewBinding
 import mk.ukim.finki.foody.databinding.FragmentRecipesBinding
 import mk.ukim.finki.foody.models.Result
+import mk.ukim.finki.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 import org.jsoup.Jsoup
 
 
@@ -20,12 +21,11 @@ class OverviewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_overview, container, false)
         _binding = FragmentOverviewBinding.inflate(inflater, container, false)
         val args = arguments
-        val myBundle: Result? = args?.getParcelable("recipeBundle")
+        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
         binding.mainImageView.load(myBundle?.image)
         binding.titleTextView.text = myBundle?.title
         binding.likesTextView.text = myBundle?.aggregateLikes.toString()
