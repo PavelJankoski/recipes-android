@@ -1,4 +1,4 @@
-package mk.ukim.finki.foody.data.database
+package mk.ukim.finki.foody.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

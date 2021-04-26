@@ -9,7 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mk.ukim.finki.foody.data.Repository
-import mk.ukim.finki.foody.data.database.RecipesEntity
+import mk.ukim.finki.foody.data.database.entities.FavouritesEntity
+import mk.ukim.finki.foody.data.database.entities.RecipesEntity
 import mk.ukim.finki.foody.models.FoodRecipe
 import mk.ukim.finki.foody.util.NetworkResult
 import retrofit2.Response
@@ -23,11 +24,27 @@ class MainViewModel @Inject constructor(
 
 
     /** ROOM DATABASE */
-    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readDatabase().asLiveData()
+    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readRecipes().asLiveData()
+    val readFavouriteRecipes: LiveData<List<FavouritesEntity>> = repository.local.readFavouriteRecipes().asLiveData()
 
     private fun insertRecipes(recipesEntity: RecipesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
             repository.local.insertRecipes(recipesEntity)
+        }
+
+    fun insertFavouriteRecipe(favouritesEntity: FavouritesEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertFavouriteRecipes(favouritesEntity)
+        }
+
+    fun deleteFavouriteRecipe(favouritesEntity: FavouritesEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.deleteFavouriteRecipe(favouritesEntity)
+        }
+
+    private fun deleteAllFavouriteRecipes() =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.deleteAllFavouriteRecipes()
         }
 
     /** RETROFIT */

@@ -4,9 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import mk.ukim.finki.foody.data.database.RecipesEntity
+import mk.ukim.finki.foody.data.database.entities.RecipesEntity
 import mk.ukim.finki.foody.models.FoodRecipe
 import mk.ukim.finki.foody.util.NetworkResult
+import java.util.*
 
 class RecipesBinding {
     companion object {
@@ -25,6 +26,18 @@ class RecipesBinding {
             } else if (apiResponse is NetworkResult.Success) {
                 imageView.visibility = View.INVISIBLE
             }
+        }
+
+        @BindingAdapter("capitalizeFirstLetter")
+        @JvmStatic
+        fun capitalizeFirstLetter(textView: TextView, text: String) {
+            textView.text = text.capitalize(Locale.ROOT)
+        }
+
+        @BindingAdapter("doubleToString")
+        @JvmStatic
+        fun doubleToString(textView: TextView, value: Double) {
+            textView.text = value.toString()
         }
 
         @BindingAdapter("readApiResponse2", "readDatabase2", requireAll = true)
