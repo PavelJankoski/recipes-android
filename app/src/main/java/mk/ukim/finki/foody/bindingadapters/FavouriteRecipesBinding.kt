@@ -3,6 +3,8 @@ package mk.ukim.finki.foody.bindingadapters
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import mk.ukim.finki.foody.adapters.FavouriteRecipesAdapter
@@ -10,35 +12,23 @@ import mk.ukim.finki.foody.data.database.entities.FavouritesEntity
 
 class FavouriteRecipesBinding {
     companion object {
-        @BindingAdapter("viewVisibility", "setData", requireAll = false)
+
+        @BindingAdapter("setVisibility", "setData", requireAll = false)
         @JvmStatic
-        fun setDataAndViewVisibility(view: View, favouritesEntity: List<FavouritesEntity>?, mAdapter: FavouriteRecipesAdapter?) {
-            if(favouritesEntity.isNullOrEmpty()) {
-                when(view) {
-                    is ImageView -> {
-                        view.visibility = View.VISIBLE
-                    }
-                    is TextView -> {
-                        view.visibility = View.VISIBLE
-                    }
-                    is RecyclerView -> {
-                        view.visibility = View.INVISIBLE
+        fun setVisibility(view: View, favouritesEntity: List<FavouritesEntity>?, mAdapter: FavouriteRecipesAdapter?) {
+            when (view) {
+                is RecyclerView -> {
+                    val dataCheck = favouritesEntity.isNullOrEmpty()
+                    view.isInvisible = dataCheck
+                    if(!dataCheck) {
+                        favouritesEntity?.let {
+                            mAdapter?.setData(it)
+                        }
                     }
                 }
-            } else {
-                when(view) {
-                    is ImageView -> {
-                        view.visibility = View.INVISIBLE
-                    }
-                    is TextView -> {
-                        view.visibility = View.INVISIBLE
-                    }
-                    is RecyclerView -> {
-                        view.visibility = View.VISIBLE
-                        mAdapter?.setData(favouritesEntity)
-                    }
-                }
+                else -> view.isVisible = favouritesEntity.isNullOrEmpty()
             }
         }
+
     }
 }

@@ -2,11 +2,10 @@ package mk.ukim.finki.foody.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -21,7 +20,9 @@ import mk.ukim.finki.foody.util.Constants.Companion.PREFERENCES_NAME
 import java.io.IOException
 import javax.inject.Inject
 
-@ActivityRetainedScoped
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
+
+@ViewModelScoped
 class DataStoreRepository @Inject constructor(@ApplicationContext private val context: Context) {
 
     private object PreferenceKeys {
@@ -31,10 +32,11 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         val selectedDietTypeId = intPreferencesKey(PREFERENCES_DIET_TYPE_ID)
         val backOnline = booleanPreferencesKey(PREFERENCES_BACK_ONLINE)
     }
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
+
+    private val dataStore: DataStore<Preferences> = context.dataStore
 
     suspend fun saveMealAndDietType(mealType: String, mealTypeId: Int, dietType: String, dietTypeId: Int) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferenceKeys.selectedMealType] = mealType
             preferences[PreferenceKeys.selectedMealTypeId] = mealTypeId
             preferences[PreferenceKeys.selectedDietType] = dietType
@@ -43,12 +45,12 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
     }
 
     suspend fun saveBackOnlone(backOnline: Boolean) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferenceKeys.backOnline] = backOnline
         }
     }
 
-    val readMealAndDietType: Flow<MealAndDietType> = context.dataStore.data.catch { exception ->
+    val readMealAndDietType: Flow<MealAndDietType> = dataStore.data.catch { exception ->
         if(exception is IOException) {
             emit(emptyPreferences())
         }
@@ -68,7 +70,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         )
     }
 
-    val readBackOnline: Flow<Boolean> = context.dataStore.data.catch { exception ->
+    val readBackOnline: Flow<Boolean> = dataStore.data.catch { exception ->
         if(exception is IOException) {
             emit(emptyPreferences())
         }
